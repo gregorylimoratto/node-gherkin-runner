@@ -1,19 +1,19 @@
-# karma-jasmine-feature
+# node-gherkin-runner
 
-Karma plugin that use gherkin feature files to describe tests with Jasmine
+Node module that transforme feature files into full javascript (using [https://github.com/gregorylimoratto/gherkin-specs-api.git](https://github.com/gregorylimoratto/gherkin-specs-api.git) 
+and run then using mocha, jasmine-node or protractor
 
 Any feedback is appreciated ! 
-
 
 ## Usage
 
 ### Install
 
-karma-jasmine-feature is available as an npm module
+node-gherkin-runner is available as an npm module
 
 Install locally with
 
-	npm install karma-jasmine-feature --save-dev
+	npm install node-gherkin-runner --save-dev
 
 
 ### Features
@@ -40,16 +40,17 @@ The examples are written with Gherkin language : [https://github.com/cucumber/cu
 			And failed the test
 
 
-Each Gherkin ***Feature*** will become a jasmine ***describe***
+Each Gherkin ***Feature*** will become a jasmine/mocha ***describe***
 
 And each ***Scenario*** will become a ***it***
 
-Some tags will allow you to ignore feature execution : jasmine xdescribe() / xit()
+Some tags will allow you to ignore feature execution : jasmine/mocha xdescribe() / xit()
 
 - @ignore - ignore Feature or Scenario
 - @ignoreOthers - ignore all other feature / scenario exept those with this tag
 
 ### Javascript Specs
+
 
 
 The plugin will look for each features implementations within karma included files and execute matching steps.

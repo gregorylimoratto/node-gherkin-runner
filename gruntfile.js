@@ -1,5 +1,4 @@
 module.exports = function(grunt) {
-
   grunt.initConfig({
     jshint: {
       options:{
@@ -19,16 +18,12 @@ module.exports = function(grunt) {
       },
       files: ['lib/**/*.js', 'tests/**/*.js']
     },
-    watch: {
-      files: ['<%= jshint.files %>'],
-      tasks: ['jshint', 'concat', 'karma']
-    },
-    karma:{
-      src:{
-        configFile:'karma.conf.js',
-        autoWatch:false,
-        singleRun:true,
-        reporters:['dots']
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec'
+        },
+        src: ['tests/**/*.js', 'lib/gherkin-runner.js']
       }
     },
     'npm-publish':{
@@ -36,14 +31,12 @@ module.exports = function(grunt) {
     }
   });
 
-
-  grunt.loadNpmTasks('grunt-contrib-concat');
+  // TODO : extract featureFileBasePath into a config module file
+  global.featureFileBasePath = require.resolve('./') + "\\..\\..\\"
+  grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-npm');
   
-  grunt.registerTask('default',  ['karma']); // , 
-  grunt.registerTask('release',  ['npm-publish']);
+  grunt.registerTask('default', 'mochaTest');
+  grunt.registerTask('release',  ['mochaTest', 'npm-publish']);
 };
