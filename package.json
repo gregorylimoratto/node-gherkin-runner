@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "glob": "^5.0.15",
-    "gherkin-specs-api": "0.0.1-beta",
+    "gherkin-specs-api": "0.0.2-beta",
     "gherkin": "^3.1.0"
   }
 }
