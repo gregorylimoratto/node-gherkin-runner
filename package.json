@@ -15,7 +15,7 @@
     "url": "git://github.com/gregorylimoratto/node-gherkin-runner.git"
   },
   "scripts": {
-    "test": "karma start"
+    "test": "grunt"
   },
   "author": "Gregory Limoratto <gregorylimoratto@gmail.com>",
   "license": "ISC",
