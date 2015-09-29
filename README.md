@@ -40,20 +40,18 @@ The examples are written with Gherkin language : [https://github.com/cucumber/cu
 			And failed the test
 
 
-Each Gherkin ***Feature*** will become a jasmine/mocha ***describe***
+Each Gherkin ***Feature*** will become a jasmine/mocha/protractor ***describe***
 
 And each ***Scenario*** will become a ***it***
 
-Some tags will allow you to ignore feature execution : jasmine/mocha xdescribe() / xit()
+Some tags will allow you to ignore feature execution : jasmine/mocha/protractor xdescribe() / xit()
 
 - @ignore - ignore Feature or Scenario
 - @ignoreOthers - ignore all other feature / scenario exept those with this tag
 
 ### Javascript Specs
 
-
-
-The plugin will look for each features implementations within karma included files and execute matching steps.
+The module will look for feature files (gherkin) in `process.cwd()` and all subdirectories.
 
 The featureSteps() function host a set of steps that will be available for each feature that match the featureSteps regexp
 
@@ -110,21 +108,22 @@ You can add test initialize and cleanup :
 
 To install :
 
-	npm install karma-jasmine-feature --save-dev
-
-Then, reference framework in karma.conf.js (require jasmine framework)
-
-	frameworks: ['jasmine', 'jasmine-feature'],
+	npm install node-gherkin-runner --save-dev
 
 
-And just include feature files and specs in karma.conf.js
+And just include the module as a file to test in your test runner
 
-	files: [
-		...
-		'features/**/*.feature'
-		...
-	]
-
+Example gruntfile using mocha (and grunt-mocha-test) :
+```
+	mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec'
+        },
+        src: ['tests/**/*.js', 'node_module/node-gherkin-runner/lib/gherkin-runner.js']
+      }
+    }
+```
 
 
 #### Examples
@@ -187,12 +186,3 @@ demo.feature-specs.js
 ```
 
 ----
-#### Release Note
-
-- 26/08/2015 : First release
-	- Karma preprocessor to transform feature file into javascript file
-	- Karma framework to execute features
-	- exlude tests with @ignore & @ignoreOthers
-	- custom api : 
-		- map feature file "Feature" with featureStep(/* regexp that match Feature title + description */)
-		- map steps with given / when / then (/* regexp to catch parameters */)
