@@ -1,5 +1,4 @@
 module.exports = function(grunt) {
-  console.error(require('./lib/gherkin-runner.js'));
   grunt.initConfig({
     jshint: {
       options:{
