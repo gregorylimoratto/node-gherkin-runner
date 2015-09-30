@@ -56,12 +56,13 @@ The module will look for feature files (gherkin) in `process.cwd()` and all subd
 The featureSteps() function host a set of steps that will be available for each feature that match the featureSteps regexp
 
 ```javascript
-	featureSteps(/Calculator/)
+	var gherkin = require('node-gherkin-runner');
+	gherkin.api.featureSteps(/Calculator/)
 		.given(/I have entered (.*) into the calculator/, function(num){
 			// this step is for each feature that contains Calculator in title 
 		});
 
-	featureSteps('Calculator addition')
+	gherkin.api.featureSteps('Calculator addition')
 		.when('I press add', function(){
 			// this one is not shared for "Calculator substraction"
 		});
@@ -70,7 +71,8 @@ The featureSteps() function host a set of steps that will be available for each 
 given/when/then step can be string or regular expression that match a step in the feature file.
 
 ```javascript
-	featureSteps(/Addition/)
+	var gherkin = require('node-gherkin-runner');
+	gherkin.api.featureSteps(/Addition/)
 		.given(/I have entered (.*) into the calculator/, function(num){
 			this.numbers = this.numbers || [];
 			this.numbers.push(parseInt(num));
@@ -78,7 +80,7 @@ given/when/then step can be string or regular expression that match a step in th
 		.when('I press add', function(){
 			this.result = this.numbers.reduce(function(a,b){ return a + b },0);
 		})
-		.then(/the result should be (.*) on the screen/, function(expectedSum){
+		.then(/the result should be (\d+) on the screen/, function(expectedSum){
 			expect(this.result).toBe(parseInt(expectedSum));
 		})
 		.then('failed the test', function(){
@@ -91,14 +93,10 @@ Each step is executed on an isolated scope (*this*) which can hold current scena
 You can add test initialize and cleanup :
 
 ```javascript
-	featureSteps('Addition')
+	var gherkin = require('node-gherkin-runner');
+	gherkin.api.featureSteps('Addition')
 	 	.before(function () {
-			module('calculator'); // angular ng mock
-			var scope = null;
-			inject(function (_$injector_) {
-				scope = _$injector_.get('$rootScope').$new();
-			}); 
-	       	this.scope = scope;
+			...
 	    })
 		.after(function(){
 			...
@@ -128,61 +126,90 @@ Example gruntfile using mocha (and grunt-mocha-test) :
 
 #### Examples
 
+Using protractor :
 
 demo.feature: 
 
-	Feature: Roman numerals
+	Feature: angularjs homepage
 
-	Background: 
-		Given I have a Roman numerals calculator
+	Background:
+		Given I browse angular website
 		
-	Scenario Outline: The calculator should transform simple roman numeral to number     
-	    Given I enter '<roman>' in the calculator
-	     When I convert the roman numeral
-	     Then the displayed value is '<number>'
-		 
-	    Examples:
-		| roman | number |
-		|     I |      1 |
-		|     V |      5 |
-		|     X |     10 |
-		|     L |     50 |
-		|     C |    100 |
-		
-	Scenario: Should add two complex roman numerals
-		Given I enter 'IX' in the calculator
-		And I enter 'III' in the calculator
-		When I press add
-		Then the displayed value is 'XII'
+	Scenario: Must greet the user
 	
-	@ignore
-	Scenario: Should be ignore
-		Given A scenario with no js implementation
-		When I include this scenario
-		Then Nothing happens
+		Given I insert 'Greg' in the "yourName" field
+		When I look at the greeting message
+		Then I see 'Hello Greg!'
+	
+	Scenario: Must display a pre-set todo list
+		
+		Given The todo list is displayed by default with 2 elements
+		When I look at the todo elements
+		Then There is 2 elements in todo list
+		And The text for the number 2 is 'build an angular app'
+	
+	Scenario: Must add a todo when Add button is click
+	
+		Given The todo list is displayed by default with 2 elements
+		When I insert 'write a protractor test using gherkin' in the input field
+		And I click on Add button
+		And I look at the todo elements
+		Then There is 3 elements in todo list
+		And The text for the number 3 is 'write a protractor test using gherkin'
 
 demo.feature-specs.js
 
 ```javascript
-	(function(){
+	var gherkin = require('node-gherkin-runner');
+
+(function(){
 	'use strict';
-		featureSteps(/Roman numerals/)
-			.given(/I have a Roman numerals calculator/, function(){
-				this.calculator = new Calculator();
-			})
-			.given(/I enter '(.*)' in the calculator/, function(roman){
-				this.calculator.setInput(roman);
-			})
-			.when(/I convert the roman numeral/, function(){
-				this.calculator.convert();
-			})
-			.when(/I press add/, function(){
-				this.calculator.add();
-			})
-			.then(/the displayed value is '(.*)'/, function(num){
-				expect(this.calculator.getDisplayedValue()).toBe(num);
-			});
-	})();
+	gherkin.api.featureSteps(/angularjs homepage/)
+		.given(/I browse angular website/, function(){
+			browser.get('http://www.angularjs.org');
+		})
+		.given(/I insert '(.*)' in the "yourName" field/, function(nom){
+			element(by.model('yourName')).sendKeys(nom);
+		})
+		.when(/I look at the greeting message/, function(){
+			 this.message = element(by.binding('yourName'));
+		})
+		.then(/I see '(.*)'/, function(message){
+			expect(this.message.getText()).toEqual(message);
+		})
+		.given(/The todo list is displayed by default with 2 elements/, function(){
+			// nothing to do
+		})
+		.when(/I look at the todo elements/, function(){
+			this.todos = element.all(by.repeater('todo in todoList.todos'));
+		})
+		.then(/There is (\d+) elements in todo list/,function(nombre){
+			expect(this.todos.count()).toEqual(parseInt(nombre));
+		})
+		.then(/The text for the number (\d+) is '(.*)'/, function(numero, text){
+			expect(this.todos.get(numero-1).getText()).toEqual(text);
+		})
+		.when(/I insert '(.*)' in the input field/, function(text){
+			var addTodo = element(by.model('todoList.todoText'));
+			addTodo.sendKeys(text);
+		})
+		.when(/I click on Add button/, function(){
+			var addButton = element(by.css('[value="add"]'));
+      		addButton.click();
+		})
+})();
+```
+
+e2e.config (protractor) : 
+```javascript
+var gherkinRunnerPath = require('node-gherkin-runner').runnerPath;
+gherkinRunnerPath = gherkinRunnerPath.replace(__dirname+'\\', '');
+console.log(gherkinRunnerPath);
+exports.config = {
+  framework: 'jasmine2',
+  seleniumAddress: 'http://localhost:4444/wd/hub',
+  specs: ['spec/demo.feature-specs.js', gherkinRunnerPath]
+}
 ```
 
 ----
