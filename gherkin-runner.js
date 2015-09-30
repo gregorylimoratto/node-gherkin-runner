@@ -143,7 +143,7 @@
 	}
 
 	
-	module.exports = {
+	module.export = {
 		runnerPath: __dirname + "\\runner.js",
 		api: gherkinSpecApi,
 		loadFeaturesFiles: loadFeaturesFiles

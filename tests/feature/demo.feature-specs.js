@@ -1,8 +1,8 @@
-var featureApi = require('gherkin-specs-api');
+var gherkin = require('../../lib/gherkin-runner');
 
 (function(){
 	'use strict';
-	featureApi.featureSteps(/Roman numerals/)
+	gherkin.api.featureSteps(/Roman numerals/)
 		.given(/I have a Roman numerals calculator/, function(){
 			//this.calculator = new Calculator();
 		})
@@ -19,7 +19,7 @@ var featureApi = require('gherkin-specs-api');
 		//	expect(this.calculator.getDisplayedValue()).toBe(num);
 		});
 		
-	featureApi.featureSteps(/Roman numerals/)
+	gherkin.api.featureSteps(/Roman numerals/)
 		.given("I add a quote ' in step",function(){})
 		.when("I run the scenario with (.*)",function(param){ 
 			this.param = param; 
@@ -28,7 +28,7 @@ var featureApi = require('gherkin-specs-api');
 			//expect(this.param).toBe(test); 
 		});
 		
-	featureApi.featureSteps('')
+	gherkin.api.featureSteps('')
 		.given(/A scenario with no js implementation/,function(){ throw new Error("Should not be called"); })
 		.when(/I include this scenario/,function(){ throw new Error("Should not be called"); })
 		.then(/Nothing happens/,function(){ throw new Error("Should not be called"); })

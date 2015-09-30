@@ -1,4 +1,5 @@
 module.exports = function(grunt) {
+  console.error(require('./lib/gherkin-runner.js'));
   grunt.initConfig({
     jshint: {
       options:{
@@ -23,7 +24,7 @@ module.exports = function(grunt) {
         options: {
           reporter: 'spec'
         },
-        src: ['tests/**/*.js', 'lib/gherkin-runner.js']
+        src: ['tests/**/*.js', require('./lib/gherkin-runner.js').runnerPath]
       }
     },
     'npm-publish':{
