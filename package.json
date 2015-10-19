@@ -1,6 +1,6 @@
 {
   "name": "node-gherkin-runner",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "node module that run tests using mocha, protractor or jasmine-node using gherkin",
   "main": "lib/gherkin-runner.js",
   "keywords": [
@@ -20,6 +20,7 @@
   "author": "Gregory Limoratto <gregorylimoratto@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "bluebird": "^2.10.2",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-mocha-test": "^0.12.7",
@@ -27,7 +28,7 @@
   },
   "dependencies": {
     "glob": "^5.0.15",
-    "gherkin-specs-api": "1.0.0",
+    "gherkin-specs-api": "1.0.1",
     "gherkin": "^3.1.0"
   }
 }
