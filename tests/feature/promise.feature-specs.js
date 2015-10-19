@@ -3,44 +3,28 @@ var gherkin = require('../../lib/gherkin-runner');
 (function(){
 	'use strict';
 	gherkin.api.featureSteps(/promise/)
-		.given(/j'ai une promise bleubird/, function(){
-			
+		.given(/I use Bluebird/, function(){ 
 			this.promise = require('bluebird');
+		})
+		.when(/I have a promise setting '(.*)' in context after (\d+) ms/, function(message, ms){ 
 			var defer = this.promise.defer();
-			
+			var self = this;
 			setTimeout(function(){
-				//defer.reject(new Error("KO"));
-				defer.resolve({ errorMessage: "KO", person : { nom : "test"}});
-			},1000);
-			
+				if (message === "fail"){
+					//defer.reject({errorMessage: message});
+					
+					self.message = message;
+					defer.resolve();
+				} else {
+					self.message = message;
+					defer.resolve();
+				}
+			}, ms);
 			return defer.promise;
 		})
-		.when(/j'enchaine une autre promise/, function(roman){
+		.then(/I have '(.*)' in context/,function(message){
 			var assert = require("assert");
-			assert.equal("TAC", "");
-			var result = this.promise.resolve();
-			var self = this;
-			return  result.then(function(){
-				self.result = "TAC";
-			});
-		})
-		.then(/j'ai le resultat/, function(){
-			var assert = require("assert");
-			assert.equal("TAC", this.result);
-		})
+			assert.equal(message, this.message); 
+		});
 })();
 
-
-function Obj(){
-	
-}
-
-Obj.prototype.DoQqch = function(){
-	this.promise = require('bluebird');
-	var defer = this.promise.defer();
-	setTimeout(function(){
-		defer.resolve("OK");
-	},1000);
-	
-	return defer.promise;
-}
