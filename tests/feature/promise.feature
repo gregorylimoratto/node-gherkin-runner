@@ -10,4 +10,5 @@ Feature: promise
 		Given I use Bluebird
 		When I have a promise setting 'fail' in context after 250 ms
 		Then I have 'fail' in context
+	
 		

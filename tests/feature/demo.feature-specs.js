@@ -17,7 +17,7 @@ var gherkin = require('../../lib/gherkin-runner');
 		})
 		.then(/the displayed value is '(.*)'/, function(num){
 		//	expect(this.calculator.getDisplayedValue()).toBe(num);
-		});
+		});  
 		
 	gherkin.api.featureSteps(/Roman numerals/)
 		.given("I add a quote ' in step",function(){})
