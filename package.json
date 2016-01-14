@@ -1,6 +1,6 @@
 {
   "name": "node-gherkin-runner",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "node module that run tests using mocha, protractor or jasmine-node using gherkin",
   "main": "lib/gherkin-runner.js",
   "keywords": [
