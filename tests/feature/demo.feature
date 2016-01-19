@@ -36,4 +36,7 @@
 	Examples:
 		| I'm a param |
 		| TEST		  |
-		
+	
+    
+    Scenario: Should handle plain text arguments
+        
