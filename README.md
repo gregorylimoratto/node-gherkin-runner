@@ -168,8 +168,8 @@ demo.feature-specs.js
 		.given(/I browse angular website/, function(){
 			browser.get('http://www.angularjs.org');
 		})
-		.given(/I insert '(.*)' in the "yourName" field/, function(nom){
-			element(by.model('yourName')).sendKeys(nom);
+		.given(/I insert '(.*)' in the "yourName" field/, function(name){
+			element(by.model('yourName')).sendKeys(name);
 		})
 		.when(/I look at the greeting message/, function(){
 			 this.message = element(by.binding('yourName'));
@@ -183,11 +183,11 @@ demo.feature-specs.js
 		.when(/I look at the todo elements/, function(){
 			this.todos = element.all(by.repeater('todo in todoList.todos'));
 		})
-		.then(/There is (\d+) elements in todo list/,function(nombre){
-			expect(this.todos.count()).toEqual(parseInt(nombre));
+		.then(/There is (\d+) elements in todo list/,function(number){
+			expect(this.todos.count()).toEqual(parseInt(number));
 		})
-		.then(/The text for the number (\d+) is '(.*)'/, function(numero, text){
-			expect(this.todos.get(numero-1).getText()).toEqual(text);
+		.then(/The text for the number (\d+) is '(.*)'/, function(number, text){
+			expect(this.todos.get(number-1).getText()).toEqual(text);
 		})
 		.when(/I insert '(.*)' in the input field/, function(text){
 			var addTodo = element(by.model('todoList.todoText'));
